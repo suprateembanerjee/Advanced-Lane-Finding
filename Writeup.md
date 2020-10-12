@@ -13,13 +13,12 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[image1]: ./undistorted.png "Undistorted"
+[image2]: ./thresholding.png "Thresholding"
+[image3]: ./warp.png "Warp"
+[image4]: ./poly.png "Poly"
+[image5]: ./final.png "Result"
+[video1]: ./test_videos_output/ProjectVideoOutput.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -52,63 +51,63 @@ To demonstrate this step, I will describe how I apply the distortion correction 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at code block In[6] in P2.ipynb). I have experimented with a number of colour channels and gradients. Three of them were clearly better than the rest: (S(HSL) or Sobel X), (S(HSL) or Sobel X or R(RGB)), and ((S(HSL) or Sobel X) and L(HSL)). While the R channel was marginally better at annotating white lane lines it induced unwanted noise in some others. Upon further experimentation among these three threshold choices, I went with the third threshold option as it removed most noise while producing reasonably consistent outcomes. Here's an example of my output for this step. 
 
-![alt text][image3]
+![alt text][image2]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform includes a function called `warp()`, which appears in code block In[10] in P2.ipynb. The `warp()` function takes as inputs an image (`img`). I chose the hardcode the source and destination points in the following manner:
 
 ```python
 src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
+    [[680,445],
+    [1059,665],
+    [248,665],
+    [590,445]])
+    
 dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+    [[850,60],
+    [850,680],
+    [450,680],
+    [450,60]])
 ```
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 680, 445      | 850, 60       | 
+| 1059, 665     | 850, 680      |
+| 248, 665      | 480, 680      |
+| 590, 445      | 450, 60       |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
+![alt text][image3]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Then I fit a 2nd order polynomial using a function called 'fit_polynomial' in code block In[50] in P2.ipynb.
 
-![alt text][image5]
+![alt text][image4]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I did this in code block In[21] of P2.ipynb Notebook. The function 'measure_curvature_real' returns two values, radius of Curvature for the left line as well as radius of Cuvature for the right line. While displaying this curvature, I have averaged these two radii. In code block In[23], I have defined a function called 'calculate_lane_stats' which return the width of the lane as well as the midpoint. Using these values, I have calculated the position of the vehicle from the center of the lane.
+
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+In code block In[26] of P2.ipynb, I implemented a function called 'warpback', which shifted the perspective of my annotated lane back onto the camera-view as viewed from the car. Stacking the annotated image over the original resulted in the desired output, as such: 
 
-![alt text][image6]
+![alt text][image5]
 
 ---
 
 ### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
-
-Here's a [link to my video result](./project_video.mp4)
+Please find the output videos in the directory titled 'test_videos_output' in the same repository.
 
 ---
 
@@ -116,4 +115,6 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.
+
+While the present version of the project does a decent job at finding the lanes in the project video, it fails for the harder challenge videos. Not only does the detections make no sense in the challenge video, the code fails to consistently detect similar lanes as in the project video. My assumption is, it has something to do with better thresholding, although I have not come across a better thresholding metric yet. I also feel the code is sensitive to shadows, although usage of Saturation and Lighness metrics has helped me stabilize this issue to a certain degree. If I were to revisit and refactor this project again in the future, I would be exploring avenues to increase tolerance to real world scenarios like uneven roads and shadows, hopefully having known a few more techniques that could help me, by then.
