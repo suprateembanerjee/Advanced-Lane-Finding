@@ -13,12 +13,12 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./undistorted.png "Undistorted"
-[image2]: ./thresholding.png "Thresholding"
-[image3]: ./warp.png "Warp"
-[image4]: ./poly.png "Poly"
-[image5]: ./final.png "Result"
-[video1]: ./test_videos_output/ProjectVideoOutput.mp4 "Video"
+[image1]: undistorted.png "Undistorted"
+[image2]: thresholding.png "Thresholding"
+[image3]: warp.png "Warp"
+[image4]: poly.png "Poly"
+[image5]: final.png "Result"
+[video1]: test_videos_output/ProjectVideoOutput.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
