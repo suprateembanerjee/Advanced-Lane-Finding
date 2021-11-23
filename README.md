@@ -13,8 +13,8 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: undistorted.PMG "Undistorted"
-[image2]: thresholding.PMG "Thresholding"
+[image1]: undistorted.PNG "Undistorted"
+[image2]: thresholding.PNG "Thresholding"
 [image3]: warp.PNG "Warp"
 [image4]: poly.PNG "Poly"
 [image5]: final.PNG "Result"
